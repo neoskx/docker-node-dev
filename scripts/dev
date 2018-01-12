@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+startX() {
+    echo "- START X server"
+    Xvfb :0  -screen 0 ${SCREEN_RES} &
+    export DISPLAY=:0
+
+    MAX=60 # About 60 seconds
+    CT=0
+    while ! xdpyinfo >/dev/null 2>&1; do
+        sleep 0.50s
+        CT=$(( CT + 1 ))
+        if [ "$CT" -ge "$MAX" ]; then
+            echo "[INFO] FATAL: $0: Gave up waiting for X server $DISPLAY"
+            exit 11
+        fi
+    done
+
+    sleep 2
+}
+
+startVNC() {
+    echo "- START VNC server: no password required. VNC port is 5900, already exposed."
+    x11vnc -forever -display ${DISPLAY} > /var/log/x11vnc.log &
+}
+
+main() {
+    startX
+    startVNC
+}
+
+main "$@"
