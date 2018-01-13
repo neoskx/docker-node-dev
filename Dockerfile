@@ -1,36 +1,33 @@
 # Base image - https://hub.docker.com/r/alekzonder/puppeteer/
-FROM alekzonder/puppeteer:1.0.0
+FROM consol/ubuntu-xfce-vnc:1.2.3
+MAINTAINER Shaoke Xu "shaokexu@gmail.com"
+ENV REFRESHED_AT 2018-01-12
 
-RUN echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list \
-    && apt-get update \
-    && apt-get install -y -t jessie-backports \
-       wget \
-       openjdk-8-jre-headless
+# Switch to root user
+USER 0
 
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' \
-    && apt-get update \
-    && apt-get install -y \
-       google-chrome-stable \
-       netcat-openbsd \
-       xvfb \
-       x11vnc \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir ~/.vnc \
-    && x11vnc -storepasswd Welcome1 ~/.vnc/pass
+# overwrite environment config in consol/ubuntu-xfce-vnc
+ENV VNC_RESOLUTION=1440x900 \
+    VNC_PW=welcome \
+    NODE_PATH="/usr/lib/node_modules:${NODE_PATH}"
 
-# Fix for the issue with Selenium, as described here:
-# https://github.com/SeleniumHQ/docker-selenium/issues/87
-ENV DBUS_SESSION_BUS_ADDRESS=/dev/null \
-    SCREEN_RES=1440x1024x24
+## install apt-utils, curl
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y curl
 
-ADD ./scripts /scripts
+## install nodejs - https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
+RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt-get install -y nodejs && \
+    apt-get install -y build-essential
 
-ENV PATH="/scripts:${PATH}"
+## install npm version 4.2.0, latest version has issue with puppeteer
+## after this issue fixed, then should remove this line
+RUN npm install -g npm@4.2.0
 
-RUN chmod +x /scripts/*
+## install puppeteer
+RUN npm install -g puppeteer@1.0.0
 
-EXPOSE 5900
-
-CMD ["bash", "dev"]
+## switch back to default user
+USER 1984
