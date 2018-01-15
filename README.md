@@ -1,6 +1,7 @@
-A docker image for front-end developer or nodejs developer. It can be used for research, daily work, automation and so on.
+A docker image for front-end developer or nodejs developer. It can be used for research, daily work, automation and so on
  
-This image is based on [consol/ubuntu-xfce-vnc](https://hub.docker.com/r/consol/ubuntu-xfce-vnc/).
+This image is based on [consol/ubuntu-xfce-vnc](https://hub.docker.com/r/consol/ubuntu-xfce-vnc/)
+
 ### Features
 - Ubuntu OS
 - Desktop environment [Xfce4](http://www.xfce.org/)
@@ -10,10 +11,12 @@ This image is based on [consol/ubuntu-xfce-vnc](https://hub.docker.com/r/consol/
 - Firefox
 - NodeJS 8.9.4
 - NPM 4.2.0
-- Default $HOME. **/sk**
+- Default work directory. **/workspace**
 - [Puppeteer](https://github.com/GoogleChrome/puppeteer) 1.0.0
 
 ### Usage
+
+Since it is based on [consol/ubuntu-xfce-vnc](https://hub.docker.com/r/consol/ubuntu-xfce-vnc/), so all usages listed in this page also supported
 
 > - Connect via **VNC viewer:** [vnc://localhost:25901](vnc://localhost:25901), default password: welcome
 > - Connect via **noVNC HTML5 client:** [http://localhost:26901/?password=welcome](http://localhost:26901/?password=welcome)

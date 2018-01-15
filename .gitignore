@@ -60,3 +60,6 @@ typings/
 # editor
 .idea
 
+# generate files
+examples/*.png
+

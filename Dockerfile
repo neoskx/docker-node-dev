@@ -29,5 +29,7 @@ RUN npm install -g npm@4.2.0
 ## install puppeteer
 RUN npm install -g puppeteer@1.0.0
 
-## switch back to default user
-USER 1984
+## change work directory
+RUN mkdir /workspace
+
+WORKDIR /workspace
